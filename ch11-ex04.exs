@@ -3,29 +3,20 @@ defmodule Operation do
   def parse(str), do: parse(str, 0, 0, :noop)
 
   defp parse([head|tail], infix, postfix, _) when head in '+-*/' do
-    op = case head do
-      ?+ -> :sum
-      ?- -> :sub
-      ?* -> :mul
-      ?/ -> :div
-    end
-    parse(tail, infix, postfix, op)
+    parse(tail, infix, postfix, List.to_atom([head]))
   end
-  defp parse([head|tail], infix, postfix, op) when head in '0123456789' do
-    if op == :noop do
-      parse(tail, int(head, infix), postfix, op)
-    else
-      parse([], infix, parse(tail, int(head, postfix), 0, :noop), op)
-    end
+
+  defp parse([head|tail], infix, postfix, :noop) when head in ?0..?9 do
+    parse(tail, int(head, infix), postfix, :noop)
   end
+  defp parse([head|tail], infix, postfix, op) when head in ?0..?9 do
+    parse([], infix, parse(tail, int(head, postfix), 0, :noop), op)
+  end
+
+  defp parse([], infix, _, :noop) when infix > 0, do: infix
+  defp parse([], _, postfix, :noop) when postfix > 0, do: postfix
   defp parse([], infix, postfix, op) do
-    case op do
-      :noop -> if infix > 0, do: infix, else: postfix
-      :sum -> infix + postfix
-      :sub -> infix - postfix
-      :mul -> infix * postfix
-      :div -> infix / postfix
-    end
+    apply(Kernel, op, [infix, postfix])
   end
 
   defp int(digit, value), do: value * 10 + digit - ?0
