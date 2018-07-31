@@ -33,8 +33,9 @@ defmodule Issues.CLI do
     """
     System.halt(0)
   end
-  def process({user, project, count}) do
+  def process({user, project, _count}) do
     Issues.GithubIssues.fetch(user, project)
+    |> decode_github_response()
   end
 
   def args_to_internal_representation([user, project, count]) do
@@ -45,5 +46,11 @@ defmodule Issues.CLI do
   end
   def args_to_internal_representation(_) do # bad arg or --help
     :help
+  end
+
+  def decode_github_response({:ok, body}), do: body
+  def decode_github_response({_, error}) do
+    IO.puts "Error fetching from github: #{error["message"]}"
+    System.halt(2)
   end
 end
