@@ -35,7 +35,8 @@ defmodule Issues.CLI do
   end
   def process({user, project, _count}) do
     Issues.GithubIssues.fetch(user, project)
-    |> decode_github_response()
+    |> decode_github_response
+    |> sort_into_descending_order
   end
 
   def args_to_internal_representation([user, project, count]) do
@@ -52,5 +53,10 @@ defmodule Issues.CLI do
   def decode_github_response({_, error}) do
     IO.puts "Error fetching from github: #{error["message"]}"
     System.halt(2)
+  end
+
+  def sort_into_descending_order(list_of_issues) do
+    list_of_issues
+    |> Enum.sort(&(&1["created_at"] >= &2["created_at"]))
   end
 end
