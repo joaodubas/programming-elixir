@@ -1,4 +1,6 @@
 defmodule Issues.CLI do
+  import Issues.TableFormatter, only: [print_table_for_columns: 2]
+
   @default_count 4
 
   @moduledoc """
@@ -38,6 +40,7 @@ defmodule Issues.CLI do
     |> decode_github_response
     |> sort_into_descending_order
     |> last(count)
+    |> print_table_for_columns(["number", "created_at", "title"])
   end
 
   def args_to_internal_representation([user, project, count]) do
