@@ -3,19 +3,24 @@ defmodule StatsTest do
   doctest Stats
 
   describe "Stats on list of ints" do
-    test "calculate sum" do
-      l = [1, 3, 5, 7, 9]
-      assert Stats.sum(l) == 25
+    setup do
+      [
+        list:  [1, 3, 5, 7, 9],
+        sum:   25,
+        count: 5
+      ]
     end
 
-    test "calculate count" do
-      l = [1, 3, 5, 7, 9]
-      assert Stats.count(l) == 5
+    test "calculate sum", fixture do
+      assert Stats.sum(fixture.list) == fixture.sum
     end
 
-    test "calculate average" do
-      l = [1, 3, 5, 7, 9]
-      assert Stats.average(l) == 5
+    test "calculate count", fixture do
+      assert Stats.count(fixture.list) == fixture.count
+    end
+
+    test "calculate average", fixture do
+      assert Stats.average(fixture.list) == fixture.sum/fixture.count
     end
   end
 end
