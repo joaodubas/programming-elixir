@@ -14,5 +14,15 @@ defmodule StatsPropertyTest do
         assert Stats.sum([number]) == number
       end
     end
+
+    property "sum equals average times count" do
+      check all l <- list_of(integer) do
+        assert_in_delta(
+          Stats.sum(l),
+          Stats.average(l) * Stats.count(l),
+          1.0e-6
+        )
+      end
+    end
   end
 end
