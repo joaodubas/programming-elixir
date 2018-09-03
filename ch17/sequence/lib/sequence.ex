@@ -1,18 +1,19 @@
 defmodule Sequence do
-  @moduledoc """
-  Documentation for Sequence.
-  """
+  @server Sequence.Server
 
-  @doc """
-  Hello world.
+  def start_link(current_number) do
+    GenServer.start_link(@server, current_number, name: @server)
+  end
 
-  ## Examples
+  def next_number do
+    GenServer.call(@server, :next_number)
+  end
 
-      iex> Sequence.hello
-      :world
+  def set_number(new_number) do
+    GenServer.call(@server, {:set_number, new_number})
+  end
 
-  """
-  def hello do
-    :world
+  def increment_number(delta) do
+    GenServer.cast(@server, {:increment_number, delta})
   end
 end
