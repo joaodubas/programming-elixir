@@ -1,4 +1,22 @@
 defmodule Stack.Server do
+  ###
+  # API
+
+  def start_link(initial_value) do
+    GenServer.start_link(__MODULE__, initial_value, name: __MODULE__)
+  end
+
+  def pop do
+    GenServer.call(__MODULE__, :pop)
+  end
+
+  def push(item) do
+    GenServer.cast(__MODULE__, {:push, item})
+  end
+
+  ###
+  # GenServer
+
   def init(initial_value) do
     {:ok, initial_value}
   end
