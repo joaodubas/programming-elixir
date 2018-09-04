@@ -31,4 +31,8 @@ defmodule Stack.Server do
   def handle_cast({:push, item}, current_value) do
     {:noreply, [item|current_value]}
   end
+
+  def terminate(reason, state) do
+    IO.puts("Terminating: reason #{inspect reason} | state #{inspect state}")
+  end
 end
