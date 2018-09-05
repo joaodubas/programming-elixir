@@ -1,4 +1,6 @@
 defmodule Stack.Server do
+  use GenServer
+
   ###
   # API
 
