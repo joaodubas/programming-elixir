@@ -5,10 +5,11 @@ defmodule Sequence.Application do
 
   def start(_type, _args) do
     children = [
-      {Sequence.Server, 100},
+      {Sequence.Stash, 100},
+      {Sequence.Server, nil},
     ]
 
-    opts = [strategy: :one_for_one, name: Sequence.Supervisor]
+    opts = [strategy: :rest_for_one, name: Sequence.Supervisor]
     Supervisor.start_link(children, opts)
   end
 end
