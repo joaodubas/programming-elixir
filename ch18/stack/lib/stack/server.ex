@@ -4,8 +4,8 @@ defmodule Stack.Server do
   ###
   # API
 
-  def start_link(initial_value) do
-    GenServer.start_link(__MODULE__, initial_value, name: __MODULE__)
+  def start_link(_) do
+    GenServer.start_link(__MODULE__, nil, name: __MODULE__)
   end
 
   def pop do
@@ -19,8 +19,8 @@ defmodule Stack.Server do
   ###
   # GenServer
 
-  def init(initial_value) do
-    {:ok, initial_value}
+  def init(_) do
+    {:ok, Stack.Stash.get}
   end
 
   def handle_call(:pop, _from, []) do
@@ -36,5 +36,6 @@ defmodule Stack.Server do
 
   def terminate(reason, state) do
     IO.puts("Terminating: reason #{inspect reason} | state #{inspect state}")
+    Stack.Stash.update(state)
   end
 end
