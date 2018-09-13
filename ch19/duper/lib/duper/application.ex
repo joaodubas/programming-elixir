@@ -6,6 +6,7 @@ defmodule Duper.Application do
   def start(_type, _args) do
     children = [
       Duper.Results,
+      {Duper.PathFinder, "."},
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
